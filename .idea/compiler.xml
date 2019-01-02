@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="xestore-common" />
+        <module name="xestore-common-mapper" />
+        <module name="xestore-item" />
+        <module name="xestore-manager-redis" />
+        <module name="xestore-portal" />
+        <module name="xestore-security" />
+        <module name="xestore-service-user" />
+        <module name="xestore-service-user-api" />
+        <module name="xestore-user" />
+        <module name="xestore-web-portal" />
+        <module name="xestore-web-user" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="xestore-common-config" target="1.8" />
+      <module name="xestore-common-pojo" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="xestore-common" options="-parameters" />
+      <module name="xestore-common-mapper" options="-parameters" />
+      <module name="xestore-item" options="-parameters" />
+      <module name="xestore-manager-redis" options="-parameters" />
+      <module name="xestore-portal" options="-parameters" />
+      <module name="xestore-security" options="-parameters" />
+      <module name="xestore-service-user" options="-parameters" />
+      <module name="xestore-service-user-api" options="-parameters" />
+      <module name="xestore-user" options="-parameters" />
+      <module name="xestore-web-portal" options="-parameters" />
+      <module name="xestore-web-user" options="-parameters" />
+    </option>
+  </component>
+</project>

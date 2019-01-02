@@ -1,0 +1,334 @@
+.container{
+    width: 1390px;
+}
+i,em,b{
+    font-style: normal;
+}
+a:link {text-decoration: none;}		/* 未访问的链接 */
+a:visited {text-decoration: none;}	/* 已访问的链接 */
+a:hover {text-decoration: none;}	/* 鼠标移动到链接上 */
+a:active {text-decoration: none;}
+.entrance {
+    margin-right: 400px;
+    margin-top: 10px;
+    float: right;
+
+}
+.category-name{
+    float: left;
+    background-color: #db192a;
+    width: 200px;
+    height: 40px;
+    line-height: 30px;
+    color: white;
+    margin-top: -1px;
+
+
+}
+.all-category{
+    color: white;
+    display: inline-block;
+    width: 200px;
+    height: 40px;
+    padding-left: 15px;
+    padding-top: 5px;
+}
+.all-category:hover{
+    color: white;
+
+
+}
+.chevron{
+    float: right;
+    margin-top: 8px;
+    margin-right: 8px;
+}
+.cat-list{
+    width: 200px;
+    height: 480px;
+    background-color: #6e6568;
+    padding-top: 5px;
+    position: relative;
+    left: 0px;
+    top: 0px;
+    z-index: 100;
+    display: none;
+}
+.cat-detail {
+    position: relative;
+    left: 200px;
+    top: -478px;
+    z-index: 100;
+    width: 972px;
+    border: 1px solid #e7e7e7;
+    border-left: none;
+    background: #f6f6f6;
+    display: none;
+    -moz-box-shadow: 2px 0px 5px #e1e1e1; /*firefox*/
+    -webkit-box-shadow: 2px 0px 5px #e1e1e1; /*webkit*/
+    box-shadow: 2px 0px 5px #e1e1e1; /*opera或ie9*/
+
+}
+.screening{
+    background-color: red;
+    display: none;
+    width: 1390px;
+    height: 480px;
+}
+.top {
+    height: 130px;
+
+}
+
+
+.main{
+    width: 1390px;
+    height: 2480px;
+    margin-top: 5px;
+    z-index: 0;
+    background-color: white;
+}
+.ad{
+    width: 210px;
+    float: left;
+    z-index: 0;
+    background-color: white;
+    border: 1px solid #e1e1e1;
+}
+.product-list{
+    width: 1180px;
+    float: left;
+    z-index: 0;
+}
+.ad-title{
+    line-height: 36px;
+    padding-left: 10px;
+    margin-bottom: 10px;
+}
+.ad-title h3{
+    font-family: "microsoft yahei";
+    font-size: 14px;
+}
+.ad-content li{
+    padding-left: 9px;
+    padding-right: 9px;
+    margin-bottom: 20px;
+}
+.p-img{
+    width: 100%;
+    padding: 0;
+    margin-bottom: 10px;
+    text-align: center;
+    position: relative;
+}
+.p-name{
+    height: 36px;
+    line-height: 18px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    display: block;
+    word-break: break-all;
+    word-wrap: break-word;
+    font-size:12px;
+}
+.p-price{
+    height: 16px;
+    line-height: 16px;
+    margin-bottom: 4px;
+    overflow: hidden;
+}
+.p-review{
+    color: #999;
+}
+.p-review a{
+    color: #005aa0;
+}
+.pfilter{
+    position: relative;
+    z-index: 4;
+    _zoom: 1;
+    border-top: 1px solid #DDD;
+    margin-bottom: 5px;
+}
+.filter-top{
+    height: 35px;
+    background: #F1F1F1;
+    padding: 6px 8px;
+    border-bottom: 1px solid #E7E3E7;
+}
+.filter-sort{
+    float: left;
+    margin-right: 24px;
+}
+.fs-link{
+    float: left;
+    padding: 0 10px;
+    height: 23px;
+    border: 1px solid #CCC;
+    line-height: 23px;
+    margin-right: -1px;
+    background: #FFF;
+    color: #333;
+}
+.fs-link:hover{
+    border: 1px solid #e4393c;
+}
+.curr{
+    background: #e4393c;
+    color: #FFF;
+    border-color: #e4393c;
+    float: left;
+    padding: 0 10px;
+    height: 23px;
+    line-height: 23px;
+    margin-right: -1px;
+}
+.curr:hover{
+    color: white;
+}
+
+.filter-page{
+    float: right;
+}
+.fp-text{
+    line-height: 23px;
+    margin-right: 10px;
+    font-family: Verdana;
+    float: left;
+}
+
+.fp-next:hover{
+    color: #AAA;
+}
+.fp-previous:hover{
+    color: #AAA;
+}
+.fp-previous{
+    width: 46px;
+    height: 23px;
+    border: 1px solid #DDD;
+    background: #FFF;
+    line-height: 23px;
+    font-family: "\5b8b\4f53";
+    text-align: center;
+    font-size: 16px;
+    display: inline-block;
+}
+
+
+.fp-previous{
+    width: 46px;
+    height: 23px;
+    border: 1px solid #DDD;
+    background: #FFF;
+    line-height: 23px;
+    font-family: "\5b8b\4f53";
+    text-align: center;
+    font-size: 16px;
+    display: inline-block;
+}
+.fp-next{
+    width: 46px;
+    height: 23px;
+    border: 1px solid #DDD;
+    background: #FFF;
+    line-height: 23px;
+    font-family: "\5b8b\4f53";
+    text-align: center;
+    font-size: 16px;
+    color: #AAA;
+    display: inline-block;
+}
+.disabled{
+    padding: 0;
+    background: #F1F1F1;
+    color: #CCC;
+    cursor: default;
+
+}
+.plist{
+    width: 1190px;
+    height: auto;
+    background-color: white;
+}
+.p{
+    height: 461px;
+    width: 234px;
+    margin-right: 2px;
+    float: left;
+    position: relative;
+    z-index: 1;
+    _display: inline;
+    margin-top: 10px;
+    padding: 0px;
+    background-color: white;
+
+}
+.p-div{
+    width: 220px;
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    background: white;
+    border: 1px solid #fff;
+    margin-left: 6px;
+    margin-top: 40px;
+    padding-left: 7px;
+    -webkit-transition: border-color .1s ease;
+    -moz-transition: border-color .1s ease;
+    transition: border-color .1s ease;
+}
+.show{
+    -webkit-box-shadow:0 0 10px #e1e1e1;
+    -moz-box-shadow:0 0 10px #e1e1e1;
+    box-shadow:0 0 10px #e1e1e1;
+ }
+.p-div .p-img{
+    height: 220px;
+    padding: 0;
+    margin-bottom: 15px;
+    position: relative;
+    margin-left: -7px;
+}
+.p-div .p-price{
+    position: relative;
+    line-height: 22px;
+    height: 22px;
+    overflow: hidden;
+    width: 100%;
+    margin: 0 0 8px;
+    font-size: 20px;
+}
+.p-div .p-name{
+	line-height: 20px;
+    height: 40px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+.p-div .p-commit{
+    width: 100%;
+    height: 18px;
+    margin-top: -3px;
+    margin-bottom: 9px;
+    overflow: hidden;
+}
+.p-div .p-shop{
+    line-height: 18px;
+    height: 18px;
+    overflow: hidden;
+    margin-top: -3px;
+    margin-bottom: 9px;
+}
+.p-div .p-icon{
+    overflow: hidden;
+    height: 16px;
+    margin-bottom: 12px;
+    background-color: #db192a;
+    width: 30px;
+    text-decoration: none;
+    color: white;
+    line-height: 16px;
+}

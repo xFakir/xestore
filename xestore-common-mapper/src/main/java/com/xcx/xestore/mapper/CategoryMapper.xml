@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xcx.xestore.mapper.CategoryMapper" >
+	<resultMap type="com.xcx.xestore.common.pojo.Category" id="BasicResultMap">
+		<id column="category_id" property="categoryId" jdbcType="VARCHAR"/>
+		<result column="category_name" property="categoryName" jdbcType="VARCHAR"/>
+		<result column="level" property="level" jdbcType="INTEGER"/>
+		<result column="sort" property="sort" jdbcType="INTEGER"/>
+		<result column="group_index" property="groupIndex" jdbcType="VARCHAR"/>
+		<association property="parentCategory" javaType="com.xcx.xestore.common.pojo.Category">
+			<id column="parent_category_id" property="categoryId" jdbcType="VARCHAR" />
+			<result column="parent_category_name" property="categoryName" jdbcType="VARCHAR" />
+			<result column="parent_sort" property="sort" jdbcType="INTEGER" />
+		</association>
+	</resultMap>
+	
+	<sql id="categoryColumns">
+		${table}.category_id,${table}.category_name,${table}.level,${table}.parent_category_id,${table}.isParent,
+		${table}.sort,${table}.group_index,${table}.subTitle,${table}.indexSort,${table}.indexName,${table}.createTime
+	</sql>
+	
+	
+	<select id="selectCategoryListByParentCategoryId" resultMap="BasicResultMap" parameterType="java.lang.String">
+		select 
+		
+		<include refid="categoryColumns">
+			<property name="table" value="c"/>
+		</include>,
+		
+		<include refid="categoryColumns">
+			<property name="table" value="p"/>
+		</include>
+		
+		from category_tb c
+		LEFT JOIN category_tb p
+		on c.parent_category_id = p.category_id
+		
+		<where>
+			<if test="categoryId != null">
+				c.parent_category_id = #{categoryId}  ORDER BY c.sort
+			</if>
+			<if test="categoryId == null">
+				c.parent_category_id is null and c.level is not null
+			</if>
+		</where>
+	</select>
+
+	<select id="selectSecondAndThirdCategory" resultMap="BasicResultMap" parameterType="java.lang.String">
+		select 
+		
+		<include refid="categoryColumns">
+			<property name="table" value="c"/>
+		</include>
+		
+		from category_tb c
+			where c.parent_category_id = #{categoryId}
+				or  c.parent_category_id 
+			in (select category_id from category_tb 
+			where parent_category_id = #{categoryId})
+	</select>
+</mapper>

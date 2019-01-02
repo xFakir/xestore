@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="JavaScriptSettings">
+    <option name="languageLevel" value="ES6" />
+  </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/xestore-web-user/pom.xml" />
+        <option value="$PROJECT_DIR$/xestore-service-user/pom.xml" />
+        <option value="$PROJECT_DIR$/xestore-web-portal/pom.xml" />
+        <option value="$PROJECT_DIR$/xestore-user/pom.xml" />
+        <option value="$PROJECT_DIR$/xestore-item/pom.xml" />
+        <option value="$PROJECT_DIR$/xestore-portal/pom.xml" />
+        <option value="$PROJECT_DIR$/xestore-security/pom.xml" />
+      </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/xestore-common-config/pom.xml" />
+        <option value="$PROJECT_DIR$/xestore-common-pojo/pom.xml" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+  <component name="RemoteRepositoriesConfiguration">
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Maven Central repository" />
+      <option name="url" value="https://repo1.maven.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="jboss.community" />
+      <option name="name" value="JBoss Community repository" />
+      <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="57d41046-d863-4830-8c19-1a671ca1aee0" />
+      <option name="name" value="57d41046-d863-4830-8c19-1a671ca1aee0" />
+      <option name="url" value="http://maven.aliyun.com/nexus/content/groups/public/" />
+    </remote-repository>
+  </component>
+</project>

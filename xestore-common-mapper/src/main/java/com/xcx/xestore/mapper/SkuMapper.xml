@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xcx.xestore.mapper.SkuMapper">
+	<resultMap type="com.xcx.xestore.common.pojo.Sku" id="BasicResultMap">
+		<id column="sku_id" property="skuId" jdbcType="VARCHAR" />
+		<result column="sku_name" property="skuName" jdbcType="VARCHAR" />
+		<result column="sku_version_name" property="skuVersionName"
+			jdbcType="VARCHAR" />
+		<result column="sku_attributes" property="skuAttributes"
+			jdbcType="VARCHAR" />
+		 
+		<result column="price" property="price" jdbcType="DOUBLE" />
+		<result column="quantity" property="quantity"
+			jdbcType="INTEGER" />
+		<result column="unit" property="unit" jdbcType="VARCHAR" />
+		<result column="stock" property="stock" jdbcType="BIGINT" />
+		<result column="sales" property="sales" jdbcType="BIGINT" />
+		<result column="isDefault" property="isDefault"
+			jdbcType="INTEGER" />
+		<association property="goods" javaType="com.xcx.xestore.common.pojo.Goods">
+			<id column="goods_id" property="goodsId" jdbcType="VARCHAR" />
+			<result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+			<result column="description" property="description" jdbcType="VARCHAR" />
+		</association>
+		<association property="category" javaType="com.xcx.xestore.common.pojo.Category">
+			<id column="category_id" property="categoryId" jdbcType="VARCHAR" />
+			<result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+			<result column="c_sort" property="sort" jdbcType="INTEGER" />
+			<association property="parentCategory" javaType="com.xcx.xestore.common.pojo.Category">
+				<id column="parent_category_id" property="categoryId" jdbcType="VARCHAR" />
+				<result column="parent_category_name" property="categoryName" jdbcType="VARCHAR" />
+				<result column="parent_sort" property="sort" jdbcType="INTEGER" />
+			</association>
+		</association>
+		<association property="skuImg" javaType="com.xcx.xestore.common.pojo.SkuImg">
+			<id column="sku_img_id" property="skuImgId" jdbcType="VARCHAR" />
+			<result column="url" property="url" jdbcType="VARCHAR" />
+		</association>
+		<collection property="attributeList" ofType="com.xcx.xestore.common.pojo.Attribute">
+			<id column="attribute_id" property="attributeId" jdbcType="VARCHAR" />
+			<association property="attributeName" javaType="com.xcx.xestore.common.pojo.AttributeName">
+				<id column="attribute_name_id" property="attributeNameId" jdbcType="VARCHAR" />
+				<result column="attribute_name" property="attributeName" jdbcType="VARCHAR" />
+			</association>
+			<association property="attributeValue" javaType="com.xcx.xestore.common.pojo.AttributeValue">
+				<id column="attribute_value_id" property="attributeValueId" jdbcType="VARCHAR" />
+				<result column="attribute_value" property="attributeValue" jdbcType="VARCHAR" />
+			</association>
+		</collection>
+
+	</resultMap>
+
+	<select id="selectRankSkuListByCategoryId" parameterType="java.lang.String" resultMap="BasicResultMap">
+		select s.*,c.sort c_sort,c.category_name,p.category_id parent_category_id,p.category_name parent_category_name,p.sort parent_sort,g.goods_name from sku_tb s 
+LEFT JOIN category_tb c ON s.category_id = c.category_id
+LEFT JOIN category_tb p ON c.parent_category_id = p.category_id
+LEFT JOIN goods_tb g ON s.goods_id = g.goods_id
+WHERE s.category_id in
+(select category_id from category_tb where parent_category_id =  #{categoryId})
+and isDefault = 1 ORDER BY s.sales DESC LIMIT 0,7
+	</select>
+
+	<select id="selectRecommondSkuListByCategoryId" parameterType="java.lang.String" resultMap="BasicResultMap">
+		select s.*,c.sort c_sort,c.category_name,p.category_id parent_category_id,p.category_name parent_category_name,p.sort parent_sort from sku_tb s 
+LEFT JOIN category_tb c ON s.category_id = c.category_id
+LEFT JOIN category_tb p ON c.parent_category_id = p.category_id
+WHERE s.category_id in
+(select category_id from category_tb where parent_category_id =  #{categoryId})
+and isDefault = 1
+
+		
+
+
+	</select>
+	
+	<select id="selectSkuListByGoodsId" parameterType="java.lang.String" resultMap="BasicResultMap">
+		select 
+s.*,c.sort c_sort,c.category_name,p.category_id parent_category_id,p.category_name parent_category_name,p.sort parent_sort,
+a.attribute_id,a.goods_id,a.isSku,
+an.attribute_name,an.attribute_name_id,
+av.attribute_value_id,av.attribute_value,
+si.sku_img_id,si.url,
+g.goods_name,g.description
+from sku_tb s 
+LEFT JOIN attribute_tb a ON a.sku_id = s.sku_id
+LEFT JOIN attributename_tb an ON an.attribute_name_id = a.attribute_name_id
+LEFT JOIN attributevalue_tb av ON av.attribute_value_id = a.attribute_value_id
+LEFT JOIN category_tb c ON an.category_id = c.category_id
+LEFT JOIN sku_img_tb si ON s.sku_img_id = si.sku_img_id
+LEFT JOIN category_tb p ON c.parent_category_id = p.category_id
+LEFT JOIN goods_tb g ON g.goods_id = s.goods_id
+WHERE s.goods_id = #{goodsId}
+	
+	</select>
+
+</mapper>

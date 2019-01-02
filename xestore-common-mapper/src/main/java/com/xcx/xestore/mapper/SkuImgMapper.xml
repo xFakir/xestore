@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xcx.xestore.mapper.SkuImgMapper" >
+	<resultMap type="com.xcx.xestore.common.pojo.SkuImg" id="BasicResultMap">
+		<id column="sku_img_id" property="skuImgId" jdbcType="VARCHAR"/>
+		<result column="url" property="url" jdbcType="VARCHAR"/>
+		<association property="sku" javaType="com.xcx.xestore.common.pojo.Sku">
+			<id column="sku_id" property="skuId" jdbcType="VARCHAR" />
+			<result column="sku_name" property="skuName" jdbcType="VARCHAR" />
+			<result column="sku_version_name" property="skuVersionName" jdbcType="VARCHAR" />
+			<result column="sku_attributes" property="skuAttributes" jdbcType="VARCHAR" />		 
+			<result column="price" property="price" jdbcType="DOUBLE" />
+			<result column="quantity" property="quantity" jdbcType="INTEGER" />
+			<result column="unit" property="unit" jdbcType="VARCHAR" />
+			<result column="stock" property="stock" jdbcType="BIGINT" />
+			<result column="sales" property="sales" jdbcType="BIGINT" />
+			<result column="isDefault" property="isDefault" jdbcType="INTEGER" />
+			<association property="goods" javaType="com.xcx.xestore.common.pojo.Goods">
+				<id column="goods_id" property="goodsId" jdbcType="VARCHAR" />
+				<result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+			</association>
+			<association property="category" javaType="com.xcx.xestore.common.pojo.Category">
+				<id column="category_id" property="categoryId" jdbcType="VARCHAR" />
+				<result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+				<result column="c_sort" property="sort" jdbcType="INTEGER" />
+				<association property="parentCategory" javaType="com.xcx.xestore.common.pojo.Category">
+					<id column="parent_category_id" property="categoryId" jdbcType="VARCHAR" />
+					<result column="parent_category_name" property="categoryName" jdbcType="VARCHAR" />
+					<result column="parent_sort" property="sort" jdbcType="INTEGER" />
+				</association>
+			</association>
+		</association>
+		
+	
+	</resultMap>
+	
+	<select id="selectSkuImgBySkuId" parameterType="java.lang.String" resultMap="BasicResultMap">
+		    select 	 
+			   si.sku_img_id,si.url,
+			   s.sku_id,s.sku_name,s.sku_version_name,s.sku_attributes,s.price,s.quantity,s.unit,s.stock,s.sales,s.isDefault,
+			   g.goods_id,g.goods_name,
+			   c.category_id,c.category_name,c.sort c_sort,
+			   pc.category_id parent_category_id,pc.category_name parent_category_name,pc.sort parent_sort 
+			FROM sku_img_tb si 
+  			LEFT JOIN sku_tb s on si.sku_id = s.sku_id
+ 			LEFT JOIN goods_tb g on s.goods_id = g.goods_id
+  			LEFT JOIN category_tb c on s.category_id = c.category_id
+  			LEFT JOIN category_tb pc on pc.category_id = c.parent_category_id
+		WHERE si.sku_id = #{skuId}
+
+		
+	</select>
+	
+	
+
+</mapper>
