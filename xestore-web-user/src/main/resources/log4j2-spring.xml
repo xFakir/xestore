@@ -11,5 +11,11 @@
 		</Console>
 	</appenders>
 
+	<loggers>
+		<logger name="com.xcx.xestore" level="debug" />
+		<root level="info">
+			<appenderref ref="CONSOLE" />
+		</root>
+	</loggers>
 
 </configuration>

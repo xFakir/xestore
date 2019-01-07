@@ -73,9 +73,9 @@ public class UserController {
             claims.put("username",user.getUsername());
 
             try {
-                String token = JWTUtils.createToken(claims,UserConst.KEEP_LOGIN_TIME);
+               /* String token = JWTUtils.createToken(claims,UserConst.KEEP_LOGIN_TIME);
                 //添加token
-                request.getSession().setAttribute("token",token);
+                request.getSession().setAttribute("token",token);*/
 
 
             } catch (Exception e){

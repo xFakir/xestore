@@ -10,6 +10,7 @@ import com.xcx.xestore.manager.redis.RedisManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -26,6 +27,7 @@ import java.util.Map;
  * @Date : 2018-10-20 10:23
  * @Version : 1.0
  */
+@Component
 public class TokenInterceptor extends HandlerInterceptorAdapter {
     private final Logger logger = LoggerFactory.getLogger(UnrepeatableInterceptor.class);
 
@@ -39,8 +41,13 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
             Method method = handlerMethod.getMethod();
             Token token = method.getAnnotation(Token.class);
             if(token != null){
-                selectHandler(token.handler(),request);
-                checkToken(request);
+                TokenHandler tokenHandler = token.handler();
+                if(tokenHandler == TokenHandler.CHECK){
+                    checkToken(request);
+                }else if(tokenHandler == TokenHandler.ADD){
+
+                    addToken(request);
+                }
             }
             return true;
         }else{
@@ -50,20 +57,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
     }
 
-    @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        if(handler instanceof HandlerMethod){
-            HandlerMethod handlerMethod = (HandlerMethod) handler;
-            Method method = handlerMethod.getMethod();
-            Token token = method.getAnnotation(Token.class);
-            if(token != null){
-                selectHandler(token.handler(),request);
-                updateToken(request);
-            }
-        }else{
-            postHandle(request, response, handler, modelAndView);
-        }
-    }
+
 
     private void selectHandler(TokenHandler tokenHandler,HttpServletRequest request) throws Exception{
         switch (tokenHandler){
@@ -84,7 +78,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
     }
     private void addToken(HttpServletRequest request) throws Exception{
         String token = TokenUtils.createToken(request);
-
+        logger.info(token);
         request.getSession().setAttribute("token",token);
 
     }
@@ -93,28 +87,31 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
         request.getSession().removeAttribute("token");
     }
 
-    private void updateToken(HttpServletRequest request){
-
+    private void updateToken(HttpServletRequest request) throws Exception{
+        String token = TokenUtils.createToken(request);
+        logger.info(token);
+        request.getSession().setAttribute("token",token);
     }
 
     private boolean check(HttpServletRequest request)throws Exception{
         String clientToken = request.getHeader("Authorization");
         String serverToken = request.getSession().getAttribute("token").toString();
-        if (serverToken == null || clientToken == null) {
-            return true;
+        if (serverToken != null && clientToken != null) {
+            //判断token是否过期
+            if(JWTUtils.verifyJWT(serverToken)){
+                return clientToken.equals(serverToken);
+            }
         }
-        //判断token是否过期
-        if(JWTUtils.verifyJWT(serverToken)){
-            return clientToken.equals(serverToken);
-        }
-
         return false;
 
     }
 
     private void checkToken(HttpServletRequest request) throws Exception{
         if(check(request)){
-
+            logger.info("not repeat");
+            updateToken(request);
+        }else{
+            logger.info("repeat");
         }
     }
 }

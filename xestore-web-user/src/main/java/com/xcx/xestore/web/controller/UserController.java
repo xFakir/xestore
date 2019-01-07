@@ -1,5 +1,7 @@
 package com.xcx.xestore.web.controller;
 
+import com.xcx.xestore.common.annotation.Token;
+import com.xcx.xestore.common.constant.TokenHandler;
 import com.xcx.xestore.common.pojo.vo.XResult;
 import com.xcx.xestore.common.pojo.User;
 import com.xcx.xestore.common.util.DateUtils;
@@ -33,8 +35,9 @@ public class UserController {
     private RedisManager redisManager;
 
     @RequestMapping(value = "/showRegister")
+    @Token(handler = TokenHandler.ADD)
     public String registerView(){
-        return "/user/register";
+        return "a";
     }
 
     @RequestMapping(value = "/showLogin")
@@ -61,9 +64,10 @@ public class UserController {
     }
 
     @PostMapping(value = "/register")
+    @Token(handler = TokenHandler.CHECK)
     public XResult register(User user){
 
-        userService.registerUser(user);
+        //userService.registerUser(user);
 
 
         XResult xResult = new XResult(11,"ss",user);
