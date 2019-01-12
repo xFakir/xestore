@@ -93,6 +93,13 @@ public class RedisManager {
 
     }
 
+    public void setex(String key ,Integer second ,String value){
+        Jedis resource = getResource();
+
+        resource.setex(key,second,value);
+
+        resource.close();
+    }
 
     public long expire(String key, Integer second) {
 

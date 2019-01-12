@@ -58,6 +58,9 @@ public interface UserService {
      */
     XResult registerUser(User user);
 
+
+    XResult activateUser(User user, String code);
+
     /**
      * @Description : 登录
      * @Date : 2018-10-12 16:00

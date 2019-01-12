@@ -7,6 +7,7 @@
 		<result column="password" property="password" jdbcType="VARCHAR"/>
 		<result column="email" property="email" jdbcType="VARCHAR"/>
 		<result column="telephone" property="telephone" jdbcType="VARCHAR"/>
+		<result column="activated" property="activated" jdbcType="INTEGER"/>
 		<result column="registerTime" property="registerTime" jdbcType="DATE"/>
 	
 	</resultMap>
@@ -24,8 +25,10 @@
 	</select>
 	
 	<select id="saveUser" parameterType="com.xcx.xestore.common.pojo.User">
-		insert into user_tb(user_id,username,password,email,telephone,registerTime) 
-		  values(#{user.userId},#{user.username},#{user.password},#{user.email},#{user.telephone},#{user.registerTime})
+		insert into user_tb(user_id,username,password,email,telephone,registerTime,activated)
+		  values(#{user.userId},#{user.username},#{user.password},#{user.email},#{user.telephone},#{user.registerTime},#{user.activated})
 	</select>
-
+	<select id="updateUser" parameterType="com.xcx.xestore.common.pojo.User">
+		update user_tb set activated = 1 where user_id = #{userId}
+	</select>
 </mapper>

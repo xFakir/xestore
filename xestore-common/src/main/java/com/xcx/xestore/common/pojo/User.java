@@ -14,6 +14,7 @@ public class User implements Serializable{
 	private String email;
 	private String telephone;
 	private Date registerTime;
+	private Integer activated;
 	private String salt;
 
 	public String getCredentialsSalt(){

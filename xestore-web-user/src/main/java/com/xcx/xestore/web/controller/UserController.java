@@ -5,8 +5,10 @@ import com.xcx.xestore.common.constant.TokenHandler;
 import com.xcx.xestore.common.pojo.vo.XResult;
 import com.xcx.xestore.common.pojo.User;
 import com.xcx.xestore.common.util.DateUtils;
+import com.xcx.xestore.common.util.VerifyCodeUtils;
 import com.xcx.xestore.manager.redis.RedisManager;
 import com.xcx.xestore.service.UserService;
+import com.xcx.xestore.service.mail.MailService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -30,6 +32,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private MailService mailService;
 
     @Autowired
     private RedisManager redisManager;
@@ -64,16 +69,31 @@ public class UserController {
     }
 
     @PostMapping(value = "/register")
-    @Token(handler = TokenHandler.CHECK)
+    //@Token(handler = TokenHandler.CHECK)
     public XResult register(User user){
 
-        //userService.registerUser(user);
+        userService.registerUser(user);
 
+        //异步发送邮件
+        String activateCode = VerifyCodeUtils.getActivateCode();
+        mailService.sendActivateMail(user,activateCode);
+
+        //异步将激活码存入redis
+        redisManager.setex(user.getUserId(),1 * 60,activateCode);
 
         XResult xResult = new XResult(11,"ss",user);
 
 
         return xResult;
+    }
+
+    @PostMapping(value = "/activate/{code}")
+    public XResult activate(User user,@PathVariable("code") String code){
+
+
+
+        return userService.activateUser(user,code);
+
     }
 
     @GetMapping(value = "/isUsernameExists/{username}")

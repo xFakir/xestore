@@ -8,6 +8,8 @@
     <file url="file://$PROJECT_DIR$/xestore-manager-redis" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/xestore-portal" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/xestore-security" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xestore-service-mail" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xestore-service-mail-api" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/xestore-service-user" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/xestore-service-user-api" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/xestore-user" charset="UTF-8" />

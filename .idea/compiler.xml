@@ -12,6 +12,8 @@
         <module name="xestore-manager-redis" />
         <module name="xestore-portal" />
         <module name="xestore-security" />
+        <module name="xestore-service-mail" />
+        <module name="xestore-service-mail-api" />
         <module name="xestore-service-user" />
         <module name="xestore-service-user-api" />
         <module name="xestore-user" />
@@ -32,6 +34,8 @@
       <module name="xestore-manager-redis" options="-parameters" />
       <module name="xestore-portal" options="-parameters" />
       <module name="xestore-security" options="-parameters" />
+      <module name="xestore-service-mail" options="-parameters" />
+      <module name="xestore-service-mail-api" options="-parameters" />
       <module name="xestore-service-user" options="-parameters" />
       <module name="xestore-service-user-api" options="-parameters" />
       <module name="xestore-user" options="-parameters" />

@@ -1,5 +1,12 @@
 package com.xcx.xestore.common.util;
 
+import com.xcx.xestore.common.pojo.User;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.UUID;
+
 /**
  * @ClassName : DateUtils
  * @Description : 生成验证码
@@ -9,4 +16,13 @@ package com.xcx.xestore.common.util;
  */
 
 public class VerifyCodeUtils {
+    private static final Logger logger = LoggerFactory.getLogger(VerifyCodeUtils.class);
+
+
+    public static String getActivateCode(){
+        return UUID.randomUUID().toString().replace("-","");
+
+    }
+
+
 }

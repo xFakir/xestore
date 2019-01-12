@@ -15,5 +15,7 @@ public interface UserMapper {
 
 	void saveUser(@Param("user") User user);
 
-	//void updateUser(User user);
+    void updateUser(User user);
+
+    //void updateUser(User user);
 }

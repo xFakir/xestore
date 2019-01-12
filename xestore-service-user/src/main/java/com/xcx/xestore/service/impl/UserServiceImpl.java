@@ -2,21 +2,24 @@ package com.xcx.xestore.service.impl;
 
 
 import com.xcx.xestore.common.constant.ResultConst;
-import com.xcx.xestore.common.constant.UserConst;
 import com.xcx.xestore.common.pojo.User;
 import com.xcx.xestore.common.pojo.vo.XResult;
+import com.xcx.xestore.common.util.VerifyCodeUtils;
 import com.xcx.xestore.common.util.VerifyUtils;
+import com.xcx.xestore.manager.redis.RedisManager;
 import com.xcx.xestore.mapper.UserMapper;
 import com.xcx.xestore.service.UserService;
-import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Valid;
 import java.util.Date;
 
 @Service
 public class UserServiceImpl implements UserService {
+    public static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
     /**
      * 用户名是否存在-方法名
      */
@@ -35,6 +38,85 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private RedisManager redisManager;
+
+
+
+
+    @Override
+    public XResult isUsernameExists(String username) {
+        User user = new User();
+        user.setUsername(username);
+
+        user = verifyUsername(user)?getUserByUsername(username):null;
+
+        String msg = (user != null)?"用户名已存在":"用户名可以注册";
+
+        Integer status = (user != null)?123:124;
+
+        return new XResult(status,msg,user);
+    }
+
+    @Override
+    public XResult registerUser(User user) {
+        boolean boo = verifyRegisterInfo(user);
+        XResult xResult = new XResult();
+        if (!boo) {
+            xResult.setStatus(100);
+            xResult.setMsg("注册失败，注册信息不合法");
+            return xResult;
+        }
+
+        user.setRegisterTime(new Date());
+        user.setActivated(0);
+
+        userMapper.saveUser(user);
+
+        xResult.setStatus(200);
+        xResult.setMsg("注册成功，请在邮箱中激活。");
+        return xResult;
+    }
+
+    @Override
+    public XResult activateUser(User user,String code){
+        XResult xResult = new XResult();
+        if(verifyActivateCode(user,code)||true){
+            user.setActivated(1);
+            userMapper.updateUser(user);
+            logger.info("激活成功");
+            xResult.setStatus(200);
+            xResult.setMsg("激活成功");
+            return xResult;
+        }
+        xResult.setStatus(100);
+        xResult.setMsg("激活失败");
+        return xResult;
+    }
+
+    @Override
+    public XResult login(User user) {
+
+        user = verifyLoginInfo(user)?getUserByUsernameAndPassword(user):null;
+
+        if (user != null) {
+            String msg = "登陆成功";
+            return new XResult(ResultConst.RESULT_SUCCESS_STATUS,msg,user);
+        }else {
+
+        }
+
+        String msg = (user != null)?"用户名或密码错误":"登陆成功";
+
+        Integer status = (user != null)?123:124;
+
+        return new XResult(status,msg,user);
+    }
+
+    @Override
+    public XResult updateUser(User user) {
+        return null;
+    }
 
 
 
@@ -98,62 +180,26 @@ public class UserServiceImpl implements UserService {
         return boo;
     }
 
+    /**
+     * 将用户和激活码存入redis
+     * @param user
+     * @param code
+     */
+    private void saveActivateCode(User user,String code){
+        redisManager.setex(user.getUserId(),1 * 60,code);
+        logger.info("激活码存入redis");
 
-    @Override
-    public XResult isUsernameExists(String username) {
-        User user = new User();
-        user.setUsername(username);
-
-        user = verifyUsername(user)?getUserByUsername(username):null;
-
-        String msg = (user != null)?"用户名已存在":"用户名可以注册";
-
-        Integer status = (user != null)?123:124;
-
-        return new XResult(status,msg,user);
     }
 
-    @Override
-    public XResult registerUser(User user) {
-        boolean boo = verifyRegisterInfo(user);
-        XResult xResult = new XResult();
-        if(!boo){
-            xResult.setStatus(100);
-            xResult.setMsg("注册失败，注册信息不合法");
-            return xResult;
-        }
+    /**
+     * 验证用户和激活码
+     * @param user
+     * @param code
+     * @return
+     */
+    private boolean verifyActivateCode(User user, String code){
 
-        user.setRegisterTime(new Date());
-
-
-
-
-        return null;
+        return code.equals(redisManager.get(user.getUserId()));
     }
-
-    @Override
-    public XResult login(User user) {
-
-        user = verifyLoginInfo(user)?getUserByUsernameAndPassword(user):null;
-
-        if (user != null) {
-            String msg = "登陆成功";
-            return new XResult(ResultConst.RESULT_SUCCESS_STATUS,msg,user);
-        }else {
-
-        }
-
-        String msg = (user != null)?"用户名或密码错误":"登陆成功";
-
-        Integer status = (user != null)?123:124;
-
-        return new XResult(status,msg,user);
-    }
-
-    @Override
-    public XResult updateUser(User user) {
-        return null;
-    }
-
 
 }
