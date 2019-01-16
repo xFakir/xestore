@@ -58,24 +58,6 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
     }
 
 
-
-    private void selectHandler(TokenHandler tokenHandler,HttpServletRequest request) throws Exception{
-        switch (tokenHandler){
-            case ADD:
-                addToken(request);
-                break;
-            case REMOVE:
-                removeToken(request);
-                break;
-            case UPDATE:
-                updateToken(request);
-                break;
-            case CHECK:
-                checkToken(request);
-                break;
-            default:
-        }
-    }
     private void addToken(HttpServletRequest request) throws Exception{
         String token = TokenUtils.createToken(request);
         logger.info(token);

@@ -4,7 +4,6 @@ package com.xcx.xestore.service.impl;
 import com.xcx.xestore.common.constant.ResultConst;
 import com.xcx.xestore.common.pojo.User;
 import com.xcx.xestore.common.pojo.vo.XResult;
-import com.xcx.xestore.common.util.VerifyCodeUtils;
 import com.xcx.xestore.common.util.VerifyUtils;
 import com.xcx.xestore.manager.redis.RedisManager;
 import com.xcx.xestore.mapper.UserMapper;
@@ -14,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Date;
 
 @Service
@@ -48,7 +48,6 @@ public class UserServiceImpl implements UserService {
     public XResult isUsernameExists(String username) {
         User user = new User();
         user.setUsername(username);
-
         user = verifyUsername(user)?getUserByUsername(username):null;
 
         String msg = (user != null)?"用户名已存在":"用户名可以注册";
@@ -81,7 +80,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public XResult activateUser(User user,String code){
         XResult xResult = new XResult();
-        if(verifyActivateCode(user,code)||true){
+        if(verifyActivateCode(user,code)){
             user.setActivated(1);
             userMapper.updateUser(user);
             logger.info("激活成功");
@@ -100,17 +99,29 @@ public class UserServiceImpl implements UserService {
         user = verifyLoginInfo(user)?getUserByUsernameAndPassword(user):null;
 
         if (user != null) {
-            String msg = "登陆成功";
+            String msg = "";
+            if(redisManager.sismember("onlineUsers", user.getUserId())) {
+                msg = "用户已登录";
+                // TODO: 2019-01-16 记录ip 异地登录发送通知等等
+
+            } else {
+
+                Date date = new Date();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                calendar.add(Calendar.MINUTE, 1);
+                date = calendar.getTime();
+
+                redisManager.zadd("onlineUsers", date.getTime(), user.getUserId());
+
+                msg = "登陆成功";
+            }
+
             return new XResult(ResultConst.RESULT_SUCCESS_STATUS,msg,user);
         }else {
-
+            return new XResult(ResultConst.RESULT_FAILURE_STATUS,"用户名或密码错误");
         }
 
-        String msg = (user != null)?"用户名或密码错误":"登陆成功";
-
-        Integer status = (user != null)?123:124;
-
-        return new XResult(status,msg,user);
     }
 
     @Override

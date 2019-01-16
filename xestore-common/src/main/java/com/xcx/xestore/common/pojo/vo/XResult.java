@@ -26,6 +26,12 @@ public class XResult {
         this.data = data;
     }
 
+    public XResult(Integer status,String msg){
+        this.status = status;
+        this.msg = msg;
+        this.data = null;
+    }
+
     public XResult(){
 
     }

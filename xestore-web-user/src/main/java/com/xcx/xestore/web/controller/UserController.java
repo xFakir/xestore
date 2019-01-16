@@ -4,14 +4,10 @@ import com.xcx.xestore.common.annotation.Token;
 import com.xcx.xestore.common.constant.TokenHandler;
 import com.xcx.xestore.common.pojo.vo.XResult;
 import com.xcx.xestore.common.pojo.User;
-import com.xcx.xestore.common.util.DateUtils;
 import com.xcx.xestore.common.util.VerifyCodeUtils;
 import com.xcx.xestore.manager.redis.RedisManager;
 import com.xcx.xestore.service.UserService;
 import com.xcx.xestore.service.mail.MailService;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 
 /**
  *
@@ -59,17 +54,16 @@ public class UserController {
 
     @PostMapping(value = "/login")
     public XResult login(HttpServletRequest request, Model model, User user){
-        Subject subject = SecurityUtils.getSubject();
 
-        UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());
+        XResult xResult = userService.login(user);
 
-        subject.login(token);
+        request.getSession().setAttribute("user",(User)xResult.getData());
 
-        return null;
+        return xResult;
     }
 
     @PostMapping(value = "/register")
-    //@Token(handler = TokenHandler.CHECK)
+    @Token(handler = TokenHandler.CHECK)
     public XResult register(User user){
 
         userService.registerUser(user);
@@ -78,7 +72,7 @@ public class UserController {
         String activateCode = VerifyCodeUtils.getActivateCode();
         mailService.sendActivateMail(user,activateCode);
 
-        //异步将激活码存入redis
+        //将激活码存入redis
         redisManager.setex(user.getUserId(),1 * 60,activateCode);
 
         XResult xResult = new XResult(11,"ss",user);
@@ -96,10 +90,12 @@ public class UserController {
 
     }
 
-    @GetMapping(value = "/isUsernameExists/{username}")
-    public XResult isUsernameExists(@PathVariable String username){
-
-        return userService.isUsernameExists(username);
+    @GetMapping(value = "/isUsernameExists")
+    public XResult isUsernameExists(User user){
+        if(user.getUsername() != null){
+            return userService.isUsernameExists(user.getUsername());
+        }
+        return new XResult(100,"error",null);
     }
 
 }
