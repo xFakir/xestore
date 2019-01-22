@@ -2,6 +2,9 @@ package com.xcx.xestore.service.impl;
 
 
 import com.xcx.xestore.common.constant.ResultConst;
+import com.xcx.xestore.common.exception.common.PersistenceException;
+import com.xcx.xestore.common.exception.common.ServiceException;
+import com.xcx.xestore.common.exception.user.UserServiceException;
 import com.xcx.xestore.common.pojo.User;
 import com.xcx.xestore.common.pojo.vo.XResult;
 import com.xcx.xestore.common.util.VerifyUtils;
@@ -129,7 +132,19 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    @Override
+    public XResult exceptionTest(){
+        User user = new User();
+        user.setUserId("1234");
+        try {
+            userMapper.updateUser(user);
+            return null;
+        }catch (PersistenceException e){
+            e.printStackTrace();
+            throw new ServiceException(1,"service ex",e);
+        }
 
+    }
 
     private User getUserByUserId(String userId) {
 

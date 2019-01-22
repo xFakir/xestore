@@ -98,4 +98,11 @@ public class UserController {
         return new XResult(100,"error",null);
     }
 
+    @RequestMapping(value = "/exceptionTest")
+    public XResult exceptionTest() throws Exception{
+
+        userService.exceptionTest();
+
+        return new XResult(100,"error",null);
+    }
 }

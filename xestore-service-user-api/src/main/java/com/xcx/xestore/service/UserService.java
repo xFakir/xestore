@@ -77,5 +77,6 @@ public interface UserService {
      */
     XResult updateUser(User user);
 
-    
+
+    XResult exceptionTest();
 }
